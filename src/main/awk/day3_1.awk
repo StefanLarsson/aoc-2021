@@ -1,3 +1,5 @@
+#! /usr/bin/awk -f
+
 BEGIN {
 	x = 0
 }
