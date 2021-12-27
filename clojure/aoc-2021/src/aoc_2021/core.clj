@@ -24,27 +24,27 @@
     [numbers (map bingo-board stuff)])
     )
 
-(definterface IBingoMarkable
-  (mark [x y])
-  (complete?)
-  )
+(defn row-col-to-index 
+  [row col] (+ (* 5 row) col))
 
-(definterface IBingoScorable
-  (score)
-  )
+(defn bingo-row? [board row]
+  (every? #(contains? (:marked board) %) (map (partial row-col-to-index row) (range 5))))
 
+(defn bingo-col? [board col]
+  (every? #(contains? (:marked board) %) (map #(row-col-to-index % col) (range 5))))
+
+(defn mark-all [number boards]
+  (map #(mark % number) boards))
 
 (defn day4-1 []
   (println "Day 4 part 1")
   (let [
         text (slurp "resources/day4.txt")
         [numbers2 boards] (parse-bingo text)
-        ]
+        marked-boards (reductions #(mark-all %2 %1) boards numbers2)]
     (prn boards)
-(println "AAA")
-    (prn (map #(mark % 92) boards))
-(println "BBB")
-    (prn (map #(mark % 12) (map #(mark % 92) boards)))
+    (println "AAA")
+    (prn (take 2 marked-boards)) 
   )
   )
 
